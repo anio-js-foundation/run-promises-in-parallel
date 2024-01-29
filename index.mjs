@@ -1,6 +1,6 @@
 import createPromise from "@anio-js-core-foundation/create-promise"
 
-export default function runPromisesInParallel(queue, max_parallel_promises) {
+export default function runPromisesInParallel(queue, max_parallel_promises, events = {}) {
 	const all_done_promise = createPromise()
 
 	let currently_running_promises = []
@@ -10,6 +10,24 @@ export default function runPromisesInParallel(queue, max_parallel_promises) {
 
 	for (let i = 0; i < max_parallel_promises; ++i) {
 		currently_running_promises.push(null)
+	}
+
+	const dispatchEvent = (event_name, task_id, ...args) => {
+		let event_handler = null
+
+		if (event_name === "run" && typeof events.onRun === "function") {
+			event_handler = events.onRun
+		} else if (event_name === "done" && typeof events.onDone === "function") {
+			event_handler = events.onDone
+		}
+
+		if (typeof event_handler !== "function") return
+
+		if ("async" in events && events.async) {
+			setTimeout(event_handler, 0, task_id, ...args)
+		} else {
+			event_handler(task_id, ...args)
+		}
 	}
 
 	const jobDone = (worker_id) => {
@@ -42,12 +60,18 @@ export default function runPromisesInParallel(queue, max_parallel_promises) {
 
 		//console.log("running task on worker", worker_id, currently_running_promises[worker_id])
 
+		dispatchEvent("run", task_id)
+
 		currently_running_promises[worker_id] = next_task().then((result) => {
 			task_results.set(task_id, result)
+
+			dispatchEvent("done", task_id, result)
 
 			jobDone(worker_id)
 		}).catch((error) => {
 			task_results.set(task_id, error)
+
+			dispatchEvent("done", task_id, error)
 
 			jobDone(worker_id)
 		})
