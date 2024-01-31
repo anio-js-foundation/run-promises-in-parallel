@@ -1,4 +1,4 @@
-import runPromisesInParallel from "./index.mjs"
+import runPromisesInParallel from "../src/index.mjs"
 
 function delay(n) {
 	return new Promise(resolve => setTimeout(resolve, n))
@@ -28,21 +28,7 @@ for (let i = 0; i < 25; ++i) {
  * 
  * Run 5 promises in parallel.
  */
-let results = await runPromisesInParallel(queue, 5, {
-	// flag whether events should be dispatched async or not
-	// defaults to false
-	async: false,
-
-	// called when a task is about to be run
-	onRun(task_id) {
-		console.log("running task", task_id)
-	},
-
-	// called when a task is done
-	onDone(task_id, result) {
-		console.log("task done", task_id, result)
-	}
-})
+let results = await runPromisesInParallel(queue, 5)
 
 for (let [task_id, result] of results) {
 	console.log(
