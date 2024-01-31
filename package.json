@@ -2,7 +2,7 @@
   "name": "@anio-js-foundation/run-promises-in-parallel",
   "version": "0.2.0",
   "description": "Run multiple promises in parallel.",
-  "main": "index.mjs",
+  "main": "./dist/package.mjs",
   "author": "Anio Software <info@anio-software.de>",
   "license": "MIT",
   "repository": {
@@ -11,5 +11,11 @@
   },
   "dependencies": {
     "@anio-js-core-foundation/create-promise": "^1.0.1"
+  },
+  "devDependencies": {
+    "@anio-js-foundation/bundle-package": "^2.0.0"
+  },
+  "scripts": {
+    "prepare": "./node_modules/.bin/bundle-package ."
   }
 }
