@@ -9,10 +9,8 @@
     "type": "git",
     "url": "git+https://github.com/anio-js-foundation/run-promises-in-parallel.git"
   },
-  "dependencies": {
-    "@anio-js-core-foundation/create-promise": "^1.0.1"
-  },
   "devDependencies": {
+    "@anio-js-core-foundation/create-promise": "^1.0.1",
     "@anio-js-foundation/bundle-package": "^2.0.1"
   },
   "scripts": {
