@@ -1,4 +1,4 @@
-import createPromise from "@anio-js-core-foundation/create-promise"
+import createPromise from "@anio-js-foundation/create-promise"
 
 export default function runPromisesInParallel(queue, max_parallel_promises, events = {}) {
 	const all_done_promise = createPromise()
